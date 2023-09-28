@@ -1,25 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!-- Added boolean field on product variant form view -->
-    <record id="mysql_connector_view_partner_form" model="ir.ui.view">
-        <field name="name">mysql.connector.view.partner.form</field>
-        <field name="model">res.partner</field>
-        <field name="inherit_id" ref="base.view_partner_form"/>
+    <record id="mmy_view_order_form" model="ir.ui.view">
+        <field name="name">mmy.view.order.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
-            <xpath expr="//notebook/page[last()]" position="after">
-                <page name="mysql_connector" string="MySQL Details">
-                    <group>
-                        <group>
-                            <field name="sql_id" />
-                            <field name="region" />
-                            <field name="cust_type" />
-                        </group>
-                        <group>
-                            <field name="date_first_coop" />
-                            <field name="credit_status" />
-                        </group>
-                    </group>
-                </page>
+            <xpath expr="//field[@name='order_line']//tree//field[@name='name']" position="after">
+                <field name="pricelist_id" />
             </xpath>
         </field>
     </record>

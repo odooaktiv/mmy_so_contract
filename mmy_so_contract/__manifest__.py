@@ -13,10 +13,8 @@
     "category": "Hidden",
     "version": "16.0.0.0.0",
     "license": "LGPL-3",
-    "depends": ["sale"],
-    "data": [
-        # "views/sale_order_views.xml",
-    ],
+    "depends": ["sale_management"],
+    "data": ["views/sale_order_views.xml"],
     "auto_install": False,
     "installable": True,
     "application": False,
