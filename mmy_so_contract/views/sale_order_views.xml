@@ -1,14 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!-- Added boolean field on product variant form view -->
+    <record id="mmy_sale_order_view_search_inherit_quotation" model="ir.ui.view">
+        <field name="name">sale.order.search.inherit.quotation</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.sale_order_view_search_inherit_quotation"/>
+        <field name="arch" type="xml">
+            <!--Hide 1 out of 2 action_confirm buttons as we do not need both and add approval buttons-->
+            <xpath expr="//filter[@name='sales']" position="before">
+                <filter string="Waiting For Approval" name="waiting_approval" domain="[('state','=', 'waiting_approval')]"/>
+                <filter string="Approved" name="approved" domain="[('state','=', 'approved')]"/>
+            </xpath>
+        </field>
+    </record>
     <record id="mmy_view_order_form" model="ir.ui.view">
         <field name="name">mmy.view.order.form</field>
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
+            <!--Hide 1 out of 2 action_confirm buttons as we do not need both and add approval buttons-->
+            <xpath expr="//button[@name='action_confirm']" position="replace">
+                <button name="action_request_approval" string="Request Approval" class="btn-primary" type="object" attrs="{'invisible': [('state', 'not in', ['draft', 'sent'])]}" groups="!mmy_so_contract.group_so_approver"/>
+                <button name="action_approve" string="Approve" class="btn-primary" type="object" attrs="{'invisible': [('state', 'not in', ['draft', 'sent', 'waiting_approval'])]}" groups="mmy_so_contract.group_so_approver"/>
+            </xpath>
+            <!--update remaining action_confirm button's visibility-->
+            <xpath expr="//button[@name='action_confirm']" position="attributes">
+                <attribute name="attrs">{'invisible': [('state', 'not in', ['approved'])]}</attribute>
+                <attribute name="class">btn-primary</attribute>
+            </xpath>
+            <!--update action_cancel button's visibility-->
+            <xpath expr="//button[@name='action_cancel']" position="attributes">
+                <attribute name="attrs">{'invisible': ['|', ('state', 'not in', ['draft', 'sent', 'waiting_approval', 'approved','sale']), ('id', '=', False)]}</attribute>
+            </xpath>
+            <!--update state's visibility: approved is always visible-->
+            <xpath expr="//field[@name='state']" position="attributes">
+                <attribute name="statusbar_visible">draft,sent,approved,sale</attribute>
+            </xpath>
             <xpath expr="//field[@name='order_line']//tree//field[@name='name']" position="after">
                 <field name="pricelist_id" />
             </xpath>
         </field>
     </record>
+    <!--Update action domain to exclude waiting approval and approved quotes from orders-->
+    <record id="sale.action_orders" model="ir.actions.act_window">
+        <field name="domain">[('state', 'not in', ('draft', 'sent', 'cancel', 'waiting_approval', 'approved'))]</field>
+    </record>
+    <record id="action_waiting_approval_quotes" model="ir.actions.act_window">
+        <field name="name">Quotation Approval Requests</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_mode">tree,kanban,form,calendar,pivot,graph,activity</field>
+        <field name="context">{}</field>
+        <field name="domain">[('state', '=', 'waiting_approval')]</field>
+    </record>
+    <menuitem id="menu_waiting_approval_quotes"
+        name="Quotation Approval Requests"
+        action="action_waiting_approval_quotes"
+        parent="sale.sale_order_menu"
+        groups="mmy_so_contract.group_so_approver"
+        sequence="15"/>
 </odoo>
