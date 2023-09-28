@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Added boolean field on product variant form view -->
+    <record id="mysql_connector_view_partner_form" model="ir.ui.view">
+        <field name="name">mysql.connector.view.partner.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook/page[last()]" position="after">
+                <page name="mysql_connector" string="MySQL Details">
+                    <group>
+                        <group>
+                            <field name="sql_id" />
+                            <field name="region" />
+                            <field name="cust_type" />
+                        </group>
+                        <group>
+                            <field name="date_first_coop" />
+                            <field name="credit_status" />
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>
