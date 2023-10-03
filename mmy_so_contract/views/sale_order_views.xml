@@ -36,8 +36,12 @@
             <xpath expr="//field[@name='state']" position="attributes">
                 <attribute name="statusbar_visible">draft,sent,approved,sale</attribute>
             </xpath>
+            <!--update pricelist domain to see only it's customer or general pricelists-->
+            <xpath expr="//field[@name='pricelist_id']" position="attributes">
+                <attribute name="domain">['|', ('partner_id','=',partner_id), ('partner_id','=', False)]</attribute>
+            </xpath>
             <xpath expr="//field[@name='order_line']//tree//field[@name='name']" position="after">
-                <field name="pricelist_id" />
+                <field name="pricelist_id" domain="['|', ('partner_id','=',parent.partner_id), ('partner_id','=', False)]"/>
             </xpath>
         </field>
     </record>

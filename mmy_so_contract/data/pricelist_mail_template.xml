@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Mail template for pricelist -->
+    <record id="mail_template_pricelist" model="mail.template">
+        <field name="name">Pricelist Template Mail</field>
+        <field name="email_from">{{ object.user_id.email or 'noreply@example.com' }}</field>
+        <field name="subject">Pricelist: {{ object.name }}</field>
+        <field name="lang">{{ object.partner_id.lang }}</field>
+        <field name="model_id" ref="product.model_product_pricelist"/>
+        <field name="auto_delete" eval="False"/>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                Hello, Here is details of pricelist contract,
+                <br/><br/>
+                Name - <t t-out="object.name" />
+                <br/><br/>
+                Currency - <t t-out="object.currency_id.name" />
+                <br/><br/>
+                <t t-if="object.incoterms">
+                    Incoterms - <t t-out="object.incoterms" />
+                    <br/><br/>
+                </t>
+                <t t-if="object.product_category_id">
+                    Product Category - <t t-out="object.product_category_id.name" />
+                    <br/><br/>
+                </t>
+                <t t-if="object.product_grade_level">
+                    Product Grade Level - <t t-out="dict(object._fields['product_grade_level'].selection).get(object.product_grade_level) or ''" />
+                    <br/><br/>
+                </t>
+                <t t-if="object.effective_date">
+                    Effective Date - <t t-out="object.effective_date" />
+                    <br/><br/>
+                </t>
+                <t t-if="object.expiration_date">
+                    Expiration Date - <t t-out="object.expiration_date" />
+                    <br/><br/>
+                </t>
+                <t t-if="object.exchange_rate">
+                    Exchange Rate - <t t-out="dict(object._fields['exchange_rate'].selection).get(object.exchange_rate) or ''" />
+                    <br/><br/>
+                </t>
+                <t t-if="object.warrenty_details">
+                    Warrenty Details - <t t-out="object.warrenty_details" />
+                    <br/><br/>
+                </t>
+                <t t-if="object.quality_details">
+                    Quality Details - <t t-out="object.quality_details" />
+                    <br/><br/>
+                </t>
+                <t t-if="object.quality_check">
+                    Quality Check - <t t-out="object.quality_check.name" />
+                    <br/><br/>
+                </t>
+                <t t-if="object.rebates">
+                    Rebates - <t t-out="dict(object._fields['rebates'].selection).get(object.rebates) or ''" />
+                    <br/><br/>
+                </t>
+                <t t-if="object.company_id">
+                    Company - <t t-out="object.company_id.name" />
+                    <br/><br/>
+                </t>
+            </div>
+        </field>
+    </record>
+</odoo>
