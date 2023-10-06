@@ -3,7 +3,6 @@
     <!-- Mail template for pricelist -->
     <record id="mail_template_pricelist" model="mail.template">
         <field name="name">Pricelist Template Mail</field>
-        <field name="email_from">{{ object.user_id.email or 'noreply@example.com' }}</field>
         <field name="subject">Pricelist: {{ object.name }}</field>
         <field name="lang">{{ object.partner_id.lang }}</field>
         <field name="model_id" ref="product.model_product_pricelist"/>
@@ -40,8 +39,8 @@
                     Exchange Rate - <t t-out="dict(object._fields['exchange_rate'].selection).get(object.exchange_rate) or ''" />
                     <br/><br/>
                 </t>
-                <t t-if="object.warrenty_details">
-                    Warrenty Details - <t t-out="object.warrenty_details" />
+                <t t-if="object.warranty_details">
+                    Warranty Details - <t t-out="object.warranty_details" />
                     <br/><br/>
                 </t>
                 <t t-if="object.quality_details">

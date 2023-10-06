@@ -23,14 +23,8 @@ class ProductPricelist(models.Model):
     )
     effective_date = fields.Datetime(string="Effective Date", copy=False)
     expiration_date = fields.Datetime(string="Expiration Date", copy=False)
-    exchange_rate = fields.Selection(
-        selection=[
-            ("moving_target", "Moving Target"),
-        ],
-        copy=False,
-        string="Exchange Rate",
-    )
-    warrenty_details = fields.Char(string="Warrenty Details", copy=False)
+    exchange_rate = fields.Char(copy=False, string="Exchange Rate")
+    warranty_details = fields.Char(string="Warranty Details", copy=False)
     quality_details = fields.Char(string="Quality Details", copy=False)
     quality_check = fields.Many2one(
         "quality.check", string="Quality Check", copy=False
@@ -47,26 +41,20 @@ class ProductPricelist(models.Model):
 
     def send_documents_email(self):
         """Creates attachments and sends them in an email"""
-        attachment_ids = []
         template_id = self.env.ref("mmy_so_contract.mail_template_pricelist")
-
         if not template_id:
-            raise UserError(
-                _(
-                    "Core settings of LetzShop are deleted, "
-                    "please upgrade module to bring back these settings"
-                )
-            )
+            raise UserError(_("Mail template missing!"))
 
         if not self.partner_id:
             raise UserError(_("Please select a customer!"))
 
+        attachment_ids = []
         for item in self.item_ids.filtered(
             lambda x: x.product_id or x.product_tmpl_id
         ):
             documents = (
                 item.product_id.variant_document_ids
-                if item.product_id
+                if item.product_id and item.product_id.variant_document_ids
                 else item.product_tmpl_id.document_ids
             )
 
@@ -83,9 +71,9 @@ class ProductPricelist(models.Model):
                 attachment_ids.append(attachment.id)
 
         email_values = {
-            "email_from": self.env.user.email,
+            "email_from": self.env.user.email or False,
             "email_to": self.partner_id.email,
-            "attachment_ids": [(6, 0, attachment_ids)],
+            "attachment_ids": [(4, att_id) for att_id in attachment_ids],
         }
 
         template_id.send_mail(

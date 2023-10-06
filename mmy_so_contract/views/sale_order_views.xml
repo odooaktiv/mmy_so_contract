@@ -41,7 +41,7 @@
                 <attribute name="domain">['|', ('partner_id','=',partner_id), ('partner_id','=', False)]</attribute>
             </xpath>
             <xpath expr="//field[@name='order_line']//tree//field[@name='name']" position="after">
-                <field name="pricelist_id" domain="['|', ('partner_id','=',parent.partner_id), ('partner_id','=', False)]"/>
+                <field name="pricelist_id" domain="['|', ('partner_id', '=', parent.partner_id), ('partner_id', '=', False)]"/>
             </xpath>
         </field>
     </record>

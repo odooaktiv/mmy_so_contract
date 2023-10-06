@@ -8,7 +8,7 @@
         <field name="arch" type="xml">
             <xpath expr="//sheet" position="before">
                 <header>
-                    <button string="Send Mail" type="object" class="btn-primary"
+                    <button string="Send Mail" type="object" class="btn-primary" attrs="{'invisible': [('partner_id', '=', False)]}"
                             name="send_documents_email"/>
                 </header>
             </xpath>
@@ -23,7 +23,7 @@
                 <field name="expiration_date"/>
                 <field name="write_date"/>
                 <field name="exchange_rate"/>
-                <field name="warrenty_details"/>
+                <field name="warranty_details"/>
                 <field name="quality_details"/>
                 <field name="quality_check"/>
                 <field name="rebates"/>

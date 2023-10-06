@@ -15,8 +15,8 @@
                 <page string="Documents" name="documents_page">
                     <field name="variant_document_ids">
                         <tree editable="bottom">
-                            <field name="name"/>
-                            <field name="file"/>
+                            <field name="name" readonly="1" force_save="True"/>
+                            <field name="file" filename="name"/>
                         </tree>
                     </field>
                 </page>
