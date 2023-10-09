@@ -8,56 +8,160 @@
         <field name="model_id" ref="product.model_product_pricelist"/>
         <field name="auto_delete" eval="False"/>
         <field name="body_html" type="html">
-            <div style="margin: 0px; padding: 0px;">
-                Hello, Here is details of pricelist contract,
+            <div style="margin: 0px;padding: 0px;">
+                Hello, Here is details of pricelist contract information,
                 <br/><br/>
-                Name - <t t-out="object.name" />
-                <br/><br/>
-                Currency - <t t-out="object.currency_id.name" />
-                <br/><br/>
-                <t t-if="object.incoterms">
-                    Incoterms - <t t-out="object.incoterms" />
-                    <br/><br/>
+                <table style="width: 55%;border-collapse:collapse;
+                    padding: 6px 6px 6px 6px;text-align: center;" border="1">
+                        <tr>
+                            <th colspan="2"><strong>Pricelist Contract Information</strong></th>
+                        </tr>
+                    <t t-if="object.name">
+                        <tr>
+                            <td><strong>Name</strong></td>
+                            <td><t t-out="object.name"/></td>
+                        </tr>
+                    </t>
+                    <t t-if="object.currency_id">
+                        <tr>
+                            <td><strong>Currency</strong></td>
+                            <td><t t-out="object.currency_id.name"/></td>
+                        </tr>
+                    </t>
+                    <t t-if="object.incoterms">
+                        <tr>
+                            <td><strong>Incoterms</strong></td>
+                            <td><t t-out="object.incoterms"/></td>
+                        </tr>
+                    </t>
+                    <t t-if="object.product_category_id">
+                        <tr>
+                            <td><strong>Product Category</strong></td>
+                            <td><t t-out="object.product_category_id.name"/></td>
+                        </tr>
+                    </t>
+                    <t t-if="object.product_grade_level">
+                        <tr>
+                            <td><strong>Product Grade Level</strong></td>
+                            <td><t t-out="dict(object._fields['product_grade_level'].selection).get(object.product_grade_level) or ''"/></td>
+                        </tr>
+                    </t>
+                    <t t-if="object.effective_date">
+                        <tr>
+                            <td><strong>Effective Date</strong></td>
+                            <td><t t-out="object.effective_date"/></td>
+                        </tr>
+                    </t>
+                    <t t-if="object.expiration_date">
+                        <tr>
+                            <td><strong>Expiration Date</strong></td>
+                            <td><t t-out="object.expiration_date"/></td>
+                        </tr>
+                    </t>
+                    <t t-if="object.exchange_rate">
+                        <tr>
+                            <td><strong>Exchange Rate</strong></td>
+                            <td><t t-out="object.exchange_rate"/></td>
+                        </tr>
+                    </t>
+                    <t t-if="object.warranty_details">
+                        <tr>
+                            <td><strong>Warranty Details</strong></td>
+                            <td><t t-out="object.warranty_details"/></td>
+                        </tr>
+                    </t>
+                    <t t-if="object.quality_details">
+                        <tr>
+                            <td><strong>Quality Details</strong></td>
+                            <td><t t-out="object.quality_details"/></td>
+                        </tr>
+                    </t>
+                    <t t-if="object.quality_check">
+                        <tr>
+                            <td><strong>Quality Check</strong></td>
+                            <td><t t-out="object.quality_check.name"/></td>
+                        </tr>
+                    </t>
+                    <t t-if="object.rebates">
+                        <tr>
+                            <td><strong>Rebates</strong></td>
+                            <td><t t-out="dict(object._fields['rebates'].selection).get(object.rebates) or ''"/></td>
+                        </tr>
+                    </t>
+                    <t t-if="object.company_id">
+                        <tr>
+                            <td><strong>Company</strong></td>
+                            <td><t t-out="object.company_id.name"/></td>
+                        </tr>
+                    </t>
+                </table>
+                <br/>
+
+                <span style="font-weight: bold;">Price Rules</span>
+                <br/>
+                <t t-if="object.item_ids">
+                    <table class="table table-bordered" border="1" style="min-width: 100%;
+                        background-color: white; padding: 6px 6px 6px 6px;
+                        border-collapse:collapse;">
+                        <thead>
+                            <tr>
+                                <th class="text-center"><span>Product</span></th>
+                                <th class="text-center"><span>Variant</span></th>
+                                <th class="text-center"><span>Min. Quantity</span></th>
+                                <th class="text-center"><span>Price</span></th>
+                                <th class="text-center"><span>Start Date</span></th>
+                                <th class="text-center"><span>End Date</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="object.item_ids" t-as="item">
+                                <tr style="text-align: center;">
+                                    <td><span t-if="item.product_tmpl_id" t-field="item.product_tmpl_id.name"/></td>
+                                    <td>
+                                        <t t-if="item.product_id.default_code">[<span t-field="item.product_id.default_code"/>]</t>
+                                        <span t-field="item.product_id.name"/><br/>
+                                    </td>
+                                    <td><span t-field="item.min_quantity"/></td>
+                                    <td><span t-field="item.fixed_price"/></td>
+                                    <td><span t-field="item.date_start"/></td>
+                                    <td><span t-field="item.date_end"/></td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
                 </t>
-                <t t-if="object.product_category_id">
-                    Product Category - <t t-out="object.product_category_id.name" />
-                    <br/><br/>
-                </t>
-                <t t-if="object.product_grade_level">
-                    Product Grade Level - <t t-out="dict(object._fields['product_grade_level'].selection).get(object.product_grade_level) or ''" />
-                    <br/><br/>
-                </t>
-                <t t-if="object.effective_date">
-                    Effective Date - <t t-out="object.effective_date" />
-                    <br/><br/>
-                </t>
-                <t t-if="object.expiration_date">
-                    Expiration Date - <t t-out="object.expiration_date" />
-                    <br/><br/>
-                </t>
-                <t t-if="object.exchange_rate">
-                    Exchange Rate - <t t-out="dict(object._fields['exchange_rate'].selection).get(object.exchange_rate) or ''" />
-                    <br/><br/>
-                </t>
-                <t t-if="object.warranty_details">
-                    Warranty Details - <t t-out="object.warranty_details" />
-                    <br/><br/>
-                </t>
-                <t t-if="object.quality_details">
-                    Quality Details - <t t-out="object.quality_details" />
-                    <br/><br/>
-                </t>
-                <t t-if="object.quality_check">
-                    Quality Check - <t t-out="object.quality_check.name" />
-                    <br/><br/>
-                </t>
-                <t t-if="object.rebates">
-                    Rebates - <t t-out="dict(object._fields['rebates'].selection).get(object.rebates) or ''" />
-                    <br/><br/>
-                </t>
-                <t t-if="object.company_id">
-                    Company - <t t-out="object.company_id.name" />
-                    <br/><br/>
+                <br/>
+
+                <span style="font-weight: bold;">Time-based rules</span>
+                <br/>
+                <t t-if="object.product_pricing_ids">
+                    <table class="table table-bordered" border="1" style="min-width: 100%;
+                        background-color: white; padding: 6px 6px 6px 6px;
+                        border-collapse:collapse;">
+                        <thead>
+                            <tr>
+                                <th class="text-center"><span>Product</span></th>
+                                <th class="text-center"><span>Variants</span></th>
+                                <th class="text-center"><span>Period</span></th>
+                                <th class="text-center"><span>Price</span></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="object.product_pricing_ids" t-as="item">
+                                <tr style="text-align: center;">
+                                    <td><span t-if="item.product_template_id" t-field="item.product_template_id.name"/></td>
+                                    <td>
+                                        <t t-foreach="item.product_variant_ids" t-as="variant">
+                                            <t t-if="variant.default_code">[<span t-field="variant.default_code"/>]</t>
+                                            <span t-field="variant.name"/><br/>
+                                        </t>
+                                    </td>
+                                    <td><span t-if="item.recurrence_id" t-field="item.recurrence_id.name"/></td>
+                                    <td><span t-field="item.price"/></td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
                 </t>
             </div>
         </field>
