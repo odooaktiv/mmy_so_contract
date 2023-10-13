@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Added boolean field on product variant form view -->
     <record id="mmy_sale_order_view_search_inherit_quotation" model="ir.ui.view">
         <field name="name">sale.order.search.inherit.quotation</field>
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale.sale_order_view_search_inherit_quotation"/>
         <field name="arch" type="xml">
-            <!--Hide 1 out of 2 action_confirm buttons as we do not need both and add approval buttons-->
+            <!--Add filters-->
             <xpath expr="//filter[@name='sales']" position="before">
                 <filter string="Waiting For Approval" name="waiting_approval" domain="[('state','=', 'waiting_approval')]"/>
                 <filter string="Approved" name="approved" domain="[('state','=', 'approved')]"/>
+                <filter string="Rejected" name="rejected" domain="[('state','=', 'rejected')]"/>
             </xpath>
         </field>
     </record>
@@ -22,6 +22,7 @@
             <xpath expr="//button[@name='action_confirm']" position="replace">
                 <button name="action_request_approval" string="Request Approval" class="btn-primary" type="object" attrs="{'invisible': [('state', 'not in', ['draft', 'sent'])]}" groups="!mmy_so_contract.group_so_approver"/>
                 <button name="action_approve" string="Approve" class="btn-primary" type="object" attrs="{'invisible': [('state', 'not in', ['draft', 'sent', 'waiting_approval'])]}" groups="mmy_so_contract.group_so_approver"/>
+                <button name="action_reject" string="Reject" class="btn-danger" type="object" attrs="{'invisible': [('state', 'not in', ['draft', 'sent', 'waiting_approval'])]}" groups="mmy_so_contract.group_so_approver"/>
             </xpath>
             <!--update remaining action_confirm button's visibility-->
             <xpath expr="//button[@name='action_confirm']" position="attributes">
@@ -30,11 +31,11 @@
             </xpath>
             <!--update action_cancel button's visibility-->
             <xpath expr="//button[@name='action_cancel']" position="attributes">
-                <attribute name="attrs">{'invisible': ['|', ('state', 'not in', ['draft', 'sent', 'waiting_approval', 'approved','sale']), ('id', '=', False)]}</attribute>
+                <attribute name="attrs">{'invisible': ['|', ('state', 'not in', ['draft', 'sent', 'waiting_approval', 'approved','sale', 'rejected']), ('id', '=', False)]}</attribute>
             </xpath>
             <!--update state's visibility: approved is always visible-->
             <xpath expr="//field[@name='state']" position="attributes">
-                <attribute name="statusbar_visible">draft,sent,approved,sale</attribute>
+                <attribute name="statusbar_visible">draft,sent,approved,rejected,sale</attribute>
             </xpath>
             <!--update pricelist domain to see only it's customer or general pricelists-->
             <xpath expr="//field[@name='pricelist_id']" position="attributes">
@@ -43,11 +44,19 @@
             <xpath expr="//field[@name='order_line']//tree//field[@name='name']" position="after">
                 <field name="pricelist_id" domain="['|', ('partner_id', '=', parent.partner_id), ('partner_id', '=', False)]"/>
             </xpath>
+            <xpath expr="//field[@name='date_order']" position="after">
+                <field name="requested_approval_by"/>
+                <field name="requested_approval_on"/>
+                <field name="approved_by"/>
+                <field name="approved_on"/>
+                <field name="rejected_by"/>
+                <field name="rejected_on"/>
+            </xpath>
         </field>
     </record>
     <!--Update action domain to exclude waiting approval and approved quotes from orders-->
     <record id="sale.action_orders" model="ir.actions.act_window">
-        <field name="domain">[('state', 'not in', ('draft', 'sent', 'cancel', 'waiting_approval', 'approved'))]</field>
+        <field name="domain">[('state', 'not in', ('draft', 'sent', 'cancel', 'waiting_approval', 'approved', 'rejected'))]</field>
     </record>
     <record id="action_waiting_approval_quotes" model="ir.actions.act_window">
         <field name="name">Quotation Approval Requests</field>
