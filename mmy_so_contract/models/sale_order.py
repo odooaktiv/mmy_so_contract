@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from odoo import fields, models
+from odoo import fields, models, _
 from datetime import datetime
 
 
@@ -87,11 +87,30 @@ class SaleOrder(models.Model):
             )
 
     def action_reject(self):
+        """Method to reject SO confirmation"""
+        return {
+            "name": "Sale Order Reject Wizard",
+            "type": "ir.actions.act_window",
+            "res_model": "sale.order.reject.wizard",
+            "view_mode": "form",
+            "view_id": self.env.ref(
+                "mmy_so_contract.view_sale_order_reject_wizard_form"
+            ).id,
+            "target": "new",
+        }
+
+    def _action_reject(self):
         """Method to reject SO"""
         for rec in self.filtered(
             lambda order: order.state
             not in ["sale", "done", "cancel", "approved"]
         ):
+            if self._context.get("message"):
+                message = _(
+                    "<b>Rejection Reason</b> : %s",
+                    self._context.get("message"),
+                )
+                rec.message_post(body=message)
             rec.write(
                 {
                     "state": "rejected",

@@ -18,6 +18,7 @@
         "data/pricelist_mail_template.xml",
         "security/ir.model.access.csv",
         "security/security.xml",
+        "wizard/sale_order_reject_wizard.xml",
         "views/sale_order_views.xml",
         "views/product_pricelist_views.xml",
         "views/product_template_views.xml",
