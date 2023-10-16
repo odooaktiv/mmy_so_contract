@@ -5,7 +5,8 @@ from odoo.exceptions import UserError
 
 
 class ProductPricelist(models.Model):
-    _inherit = "product.pricelist"
+    _name = "product.pricelist"
+    _inherit = ["product.pricelist", "mail.thread", "mail.activity.mixin"]
 
     partner_id = fields.Many2one("res.partner", string="Customer", copy=False)
     incoterms = fields.Char(string="Incoterms", copy=False)
@@ -79,3 +80,30 @@ class ProductPricelist(models.Model):
         template_id.send_mail(
             self.id, email_values=email_values, force_send=True
         )
+        sent_mails = self.env["mail.mail"].search(
+            [("model", "=", "product.pricelist"), ("res_id", "=", self.id)],
+            limit=1,
+        )
+        if sent_mails:
+            if sent_mails.state == "sent":
+                message = _(f"Email {sent_mails.subject} sent successfully!")
+                return {
+                    "type": "ir.actions.client",
+                    "tag": "display_notification",
+                    "params": {
+                        "message": message,
+                        "type": "success",
+                        "sticky": False,
+                    },
+                }
+            else:
+                message = _(f"Email {sent_mails.subject} failed to send.")
+                return {
+                    "type": "ir.actions.client",
+                    "tag": "display_notification",
+                    "params": {
+                        "message": message,
+                        "type": "danger",
+                        "sticky": False,
+                    },
+                }

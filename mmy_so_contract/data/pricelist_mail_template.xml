@@ -10,90 +10,123 @@
         <field name="body_html" type="html">
             <div style="margin: 0px;padding: 0px;">
                 Hello, Here is details of pricelist contract information,
-                <br/><br/>
-                <table style="width: 55%;border-collapse:collapse;
-                    padding: 6px 6px 6px 6px;text-align: center;" border="1">
+                <br/>
+                <br/>
+                <table class="table table-bordered" style="width: 55%;border-collapse:collapse;
+                    padding: 6px 6px 6px 6px;" border="1">
+                    <thead style="text-align:center">
                         <tr>
-                            <th colspan="2"><strong>Pricelist Contract Information</strong></th>
+                            <th colspan="2">
+                                <strong>Pricelist Contract Information</strong>
+                            </th>
                         </tr>
-                    <t t-if="object.name">
+                    </thead>
+                    <tbody>
                         <tr>
-                            <td><strong>Name</strong></td>
-                            <td><t t-out="object.name"/></td>
+                            <td>
+                                <span>Name</span>
+                            </td>
+                            <td>
+                                <t t-out="object.name"/>
+                            </td>
                         </tr>
-                    </t>
-                    <t t-if="object.currency_id">
                         <tr>
-                            <td><strong>Currency</strong></td>
-                            <td><t t-out="object.currency_id.name"/></td>
+                            <td>
+                                <span>Currency</span>
+                            </td>
+                            <td>
+                                <t t-if="object.currency_id" t-out="object.currency_id.name"/>
+                            </td>
                         </tr>
-                    </t>
-                    <t t-if="object.incoterms">
                         <tr>
-                            <td><strong>Incoterms</strong></td>
-                            <td><t t-out="object.incoterms"/></td>
+                            <td>
+                                <span>Incoterms</span>
+                            </td>
+                            <td>
+                                <t t-out="object.incoterms"/>
+                            </td>
                         </tr>
-                    </t>
-                    <t t-if="object.product_category_id">
                         <tr>
-                            <td><strong>Product Category</strong></td>
-                            <td><t t-out="object.product_category_id.name"/></td>
+                            <td>
+                                <span>Product Category</span>
+                            </td>
+                            <td>
+                                <t t-if="object.product_category_id" t-out="object.product_category_id.name"/>
+                            </td>
                         </tr>
-                    </t>
-                    <t t-if="object.product_grade_level">
                         <tr>
-                            <td><strong>Product Grade Level</strong></td>
-                            <td><t t-out="dict(object._fields['product_grade_level'].selection).get(object.product_grade_level) or ''"/></td>
+                            <td>
+                                <span>Product Grade Level</span>
+                            </td>
+                            <td>
+                                <t t-out="dict(object._fields['product_grade_level'].selection).get(object.product_grade_level) or ''"/>
+                            </td>
                         </tr>
-                    </t>
-                    <t t-if="object.effective_date">
                         <tr>
-                            <td><strong>Effective Date</strong></td>
-                            <td><t t-out="object.effective_date"/></td>
+                            <td>
+                                <span>Effective Date</span>
+                            </td>
+                            <td>
+                                <t t-out="object.effective_date"/>
+                            </td>
                         </tr>
-                    </t>
-                    <t t-if="object.expiration_date">
                         <tr>
-                            <td><strong>Expiration Date</strong></td>
-                            <td><t t-out="object.expiration_date"/></td>
+                            <td>
+                                <span>Expiration Date</span>
+                            </td>
+                            <td>
+                                <t t-out="object.expiration_date"/>
+                            </td>
                         </tr>
-                    </t>
-                    <t t-if="object.exchange_rate">
                         <tr>
-                            <td><strong>Exchange Rate</strong></td>
-                            <td><t t-out="object.exchange_rate"/></td>
+                            <td>
+                                <span>Exchange Rate</span>
+                            </td>
+                            <td>
+                                <t t-out="object.exchange_rate"/>
+                            </td>
                         </tr>
-                    </t>
-                    <t t-if="object.warranty_details">
                         <tr>
-                            <td><strong>Warranty Details</strong></td>
-                            <td><t t-out="object.warranty_details"/></td>
+                            <td>
+                                <span>Warranty Details</span>
+                            </td>
+                            <td>
+                                <t t-out="object.warranty_details"/>
+                            </td>
                         </tr>
-                    </t>
-                    <t t-if="object.quality_details">
                         <tr>
-                            <td><strong>Quality Details</strong></td>
-                            <td><t t-out="object.quality_details"/></td>
+                            <td>
+                                <span>Quality Details</span>
+                            </td>
+                            <td>
+                                <t t-out="object.quality_details"/>
+                            </td>
                         </tr>
-                    </t>
-                    <t t-if="object.quality_check">
                         <tr>
-                            <td><strong>Quality Check</strong></td>
-                            <td><t t-out="object.quality_check.name"/></td>
+                            <td>
+                                <span>Quality Check</span>
+                            </td>
+                            <td>
+                                <t t-if="object.quality_check" t-out="object.quality_check.name"/>
+                            </td>
                         </tr>
-                    </t>
-                    <t t-if="object.rebates">
                         <tr>
-                            <td><strong>Rebates</strong></td>
-                            <td><t t-out="dict(object._fields['rebates'].selection).get(object.rebates) or ''"/></td>
+                            <td>
+                                <span>Rebates</span>
+                            </td>
+                            <td>
+                                <t t-out="dict(object._fields['rebates'].selection).get(object.rebates) or ''"/>
+                            </td>
                         </tr>
-                    </t>
-                    <t t-if="object.company_id">
                         <tr>
-                            <td><strong>Company</strong></td>
-                            <td><t t-out="object.company_id.name"/></td>
+                            <td>
+                                <span>Company</span>
+                            </td>
+                            <td>
+                                <t t-if="object.company_id" t-out="object.company_id.name"/>
+                            </td>
                         </tr>
-                    </t>
+                    </tbody>
                 </table>
                 <br/>
 
@@ -105,26 +138,51 @@
                         border-collapse:collapse;">
                         <thead>
                             <tr>
-                                <th class="text-center"><span>Product</span></th>
-                                <th class="text-center"><span>Variant</span></th>
-                                <th class="text-center"><span>Min. Quantity</span></th>
-                                <th class="text-center"><span>Price</span></th>
-                                <th class="text-center"><span>Start Date</span></th>
-                                <th class="text-center"><span>End Date</span></th>
+                                <th class="text-center">
+                                    <span>Product</span>
+                                </th>
+                                <th class="text-center">
+                                    <span>Variant</span>
+                                </th>
+                                <th class="text-center">
+                                    <span>Min. Quantity</span>
+                                </th>
+                                <th class="text-center">
+                                    <span>Price</span>
+                                </th>
+                                <th class="text-center">
+                                    <span>Start Date</span>
+                                </th>
+                                <th class="text-center">
+                                    <span>End Date</span>
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
                             <t t-foreach="object.item_ids" t-as="item">
                                 <tr style="text-align: center;">
-                                    <td><span t-if="item.product_tmpl_id" t-field="item.product_tmpl_id.name"/></td>
                                     <td>
-                                        <t t-if="item.product_id.default_code">[<span t-field="item.product_id.default_code"/>]</t>
-                                        <span t-field="item.product_id.name"/><br/>
+                                        <span t-if="item.product_tmpl_id" t-field="item.product_tmpl_id.name"/>
                                     </td>
-                                    <td><span t-field="item.min_quantity"/></td>
-                                    <td><span t-field="item.fixed_price"/></td>
-                                    <td><span t-field="item.date_start"/></td>
-                                    <td><span t-field="item.date_end"/></td>
+                                    <td>
+                                        <t t-if="item.product_id.default_code">[<span
+                                                t-field="item.product_id.default_code"/>]
+                                        </t>
+                                        <span t-field="item.product_id.name"/>
+                                        <br/>
+                                    </td>
+                                    <td>
+                                        <span t-field="item.min_quantity"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="item.fixed_price"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="item.date_start"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="item.date_end"/>
+                                    </td>
                                 </tr>
                             </t>
                         </tbody>
@@ -140,24 +198,40 @@
                         border-collapse:collapse;">
                         <thead>
                             <tr>
-                                <th class="text-center"><span>Product</span></th>
-                                <th class="text-center"><span>Variants</span></th>
-                                <th class="text-center"><span>Period</span></th>
-                                <th class="text-center"><span>Price</span></th>
+                                <th class="text-center">
+                                    <span>Product</span>
+                                </th>
+                                <th class="text-center">
+                                    <span>Variants</span>
+                                </th>
+                                <th class="text-center">
+                                    <span>Period</span>
+                                </th>
+                                <th class="text-center">
+                                    <span>Price</span>
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
                             <t t-foreach="object.product_pricing_ids" t-as="item">
                                 <tr style="text-align: center;">
-                                    <td><span t-if="item.product_template_id" t-field="item.product_template_id.name"/></td>
+                                    <td>
+                                        <span t-if="item.product_template_id" t-field="item.product_template_id.name"/>
+                                    </td>
                                     <td>
                                         <t t-foreach="item.product_variant_ids" t-as="variant">
-                                            <t t-if="variant.default_code">[<span t-field="variant.default_code"/>]</t>
-                                            <span t-field="variant.name"/><br/>
+                                            <t t-if="variant.default_code">[<span t-field="variant.default_code"/>]
+                                            </t>
+                                            <span t-field="variant.name"/>
+                                            <br/>
                                         </t>
                                     </td>
-                                    <td><span t-if="item.recurrence_id" t-field="item.recurrence_id.name"/></td>
-                                    <td><span t-field="item.price"/></td>
+                                    <td>
+                                        <span t-if="item.recurrence_id" t-field="item.recurrence_id.name"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="item.price"/>
+                                    </td>
                                 </tr>
                             </t>
                         </tbody>
