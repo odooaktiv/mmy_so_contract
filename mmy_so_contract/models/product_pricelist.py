@@ -77,12 +77,19 @@ class ProductPricelist(models.Model):
             "attachment_ids": [(4, att_id) for att_id in attachment_ids],
         }
 
-        template_id.send_mail(
+        template_id.sudo().send_mail(
             self.id, email_values=email_values, force_send=True
         )
-        sent_mails = self.env["mail.mail"].search(
-            [("model", "=", "product.pricelist"), ("res_id", "=", self.id)],
-            limit=1,
+        sent_mails = (
+            self.env["mail.mail"]
+            .sudo()
+            .search(
+                [
+                    ("model", "=", "product.pricelist"),
+                    ("res_id", "=", self.id),
+                ],
+                limit=1,
+            )
         )
         if sent_mails:
             if sent_mails.state == "sent":
