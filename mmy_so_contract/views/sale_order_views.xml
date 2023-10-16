@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <!--Add new filters for approval-->
     <record id="mmy_sale_order_view_search_inherit_quotation" model="ir.ui.view">
         <field name="name">sale.order.search.inherit.quotation</field>
         <field name="model">sale.order</field>
