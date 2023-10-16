@@ -9,7 +9,7 @@
         <field name="auto_delete" eval="False"/>
         <field name="body_html" type="html">
             <div style="margin: 0px;padding: 0px;">
-                Hello, Here is details of pricelist contract information,
+                Hello <t t-out="object.partner_id.name"/>, Please find the contract information below.
                 <br/>
                 <br/>
                 <table class="table table-bordered" style="width: 55%;border-collapse:collapse;
