@@ -9,7 +9,7 @@
         Manage multiple contracts and approvals on SO
     """,
     "author": "MMY Auto",
-    "website": "",
+    "website": "http://www.mmyauto.com",
     "category": "Hidden",
     "version": "16.0.0.0.0",
     "license": "LGPL-3",
