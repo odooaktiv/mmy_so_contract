@@ -36,6 +36,6 @@ class ProductProduct(models.Model):
                     int(self._context.get("grade_id")),
                 )
             ]
-            return super(ProductProduct, self)._search(
-                args, offset, limit, order, count, access_rights_uid
-            )
+        return super(ProductProduct, self)._search(
+            args, offset, limit, order, count, access_rights_uid
+        )
