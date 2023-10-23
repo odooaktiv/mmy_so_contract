@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Added fields on product pricelist form view -->
+    <record id="mmy_product_attribute_view_form" model="ir.ui.view">
+        <field name="name">mmy.product.attribute.form</field>
+        <field name="model">product.attribute</field>
+        <field name="inherit_id" ref="product.product_attribute_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='display_type']" position="after">
+                <field name="is_grade"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -59,7 +59,7 @@
                                 <span>Product Grade Level</span>
                             </td>
                             <td>
-                                <t t-out="dict(object._fields['product_grade_level'].selection).get(object.product_grade_level) or ''"/>
+<!--                                <t t-esc="context.get('product_grade_level')"/>-->
                             </td>
                         </tr>
                         <tr>

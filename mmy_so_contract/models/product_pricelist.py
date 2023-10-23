@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from odoo import fields, models, _
+from odoo import fields, models, api, _
 from odoo.exceptions import UserError
 
 
@@ -11,15 +11,16 @@ class ProductPricelist(models.Model):
     partner_id = fields.Many2one("res.partner", string="Customer", copy=False)
     incoterms = fields.Char(string="Incoterms", copy=False)
     product_category_id = fields.Many2one(
-        "product.category", string="Product Category", copy=False
+        "product.category",
+        string="Product Category",
+        copy=False,
+        required=True,
     )
     product_grade_level = fields.Selection(
-        selection=[
-            ("grade_a", "Grade A"),
-            ("grade_b", "Grade B"),
-            ("grade_c", "Grade C"),
-        ],
+        selection="_get_custom_selection",
         copy=False,
+        required=True,
+        store=True,
         string="Product Grade Level",
     )
     effective_date = fields.Datetime(string="Effective Date", copy=False)
@@ -39,6 +40,17 @@ class ProductPricelist(models.Model):
         copy=False,
         string="Rebates",
     )
+
+    def _get_custom_selection(self):
+        # Fetch dynamic values based on active grade attribute
+        attributes = (
+            self.env["product.attribute"]
+            .search([])
+            .filtered(lambda attribute: attribute.is_grade)
+        )
+        return [
+            (str(item.id), item.name.title()) for item in attributes.value_ids
+        ]
 
     def send_documents_email(self):
         """Creates attachments and sends them in an email"""
