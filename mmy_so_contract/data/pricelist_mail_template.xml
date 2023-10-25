@@ -59,7 +59,7 @@
                                 <span>Product Grade Level</span>
                             </td>
                             <td>
-<!--                                <t t-esc="context.get('product_grade_level')"/>-->
+                                <t t-esc="ctx.get('product_grade_value')"/>
                             </td>
                         </tr>
                         <tr>

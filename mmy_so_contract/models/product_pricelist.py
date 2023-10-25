@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from odoo import fields, models, api, _
+from odoo import fields, models, _
 from odoo.exceptions import UserError
 
 
@@ -83,15 +83,18 @@ class ProductPricelist(models.Model):
                 )
                 attachment_ids.append(attachment.id)
 
+        product_grade_list = self._get_custom_selection()
+        result_dict = {key: value for key, value in product_grade_list}
+        product_grade_value = result_dict.get(self.product_grade_level) or ""
         email_values = {
             "email_from": self.env.user.email or False,
             "email_to": self.partner_id.email,
             "attachment_ids": [(4, att_id) for att_id in attachment_ids],
         }
 
-        template_id.sudo().send_mail(
-            self.id, email_values=email_values, force_send=True
-        )
+        template_id.sudo().with_context(
+            product_grade_value=product_grade_value
+        ).send_mail(self.id, email_values=email_values, force_send=True)
         sent_mails = (
             self.env["mail.mail"]
             .sudo()

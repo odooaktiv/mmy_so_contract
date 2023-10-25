@@ -31,7 +31,8 @@ class ProductProduct(models.Model):
             )
             args += [
                 (
-                    "product_template_attribute_value_ids.product_attribute_value_id",
+                    "product_template_attribute_value_ids."
+                    "product_attribute_value_id",
                     "=",
                     int(self._context.get("grade_id")),
                 )

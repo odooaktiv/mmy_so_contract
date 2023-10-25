@@ -37,9 +37,22 @@ class ProductPricelistItem(models.Model):
             duplicate_lines = self.search(domain)
             if duplicate_lines:
                 raise ValidationError(
-                    "The product should have different start and end dates."
+                    _(
+                        "The product should have different"
+                        " start and end dates."
+                    )
                 )
 
     @api.onchange("product_id", "product_tmpl_id", "categ_id")
     def _onchange_rule_content(self):
+        if (
+            not self.pricelist_id.product_category_id
+            or not self.pricelist_id.product_grade_level
+        ):
+            raise ValidationError(
+                _(
+                    "Pricelist should have 'Product Category'"
+                    " and 'Product Grade Level'."
+                )
+            )
         return
