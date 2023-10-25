@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from odoo import fields, models, _
+from odoo import fields, models, api, _
 from odoo.exceptions import UserError
 
 
@@ -40,6 +40,11 @@ class ProductPricelist(models.Model):
         copy=False,
         string="Rebates",
     )
+
+    @api.onchange("product_category_id", "product_grade_level")
+    def _onchange_category_grade(self):
+        if self.item_ids.exists():
+            self.item_ids = [(5, 0, 0)]
 
     def _get_custom_selection(self):
         # Fetch dynamic values based on active grade attribute
