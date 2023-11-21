@@ -39,11 +39,6 @@
                     'grade_id':parent.product_grade_level}
                 </attribute>
             </xpath>
-            <xpath expr="//tree[2]/field[@name='product_tmpl_id']" position="attributes">
-                <attribute name="context">{'categ_id':parent.product_category_id,
-                    'grade_id':parent.product_grade_level}
-                </attribute>
-            </xpath>
             <xpath expr="//form" position="inside">
                 <div class="oe_chatter">
                     <field name="message_follower_ids" groups="base.group_user"/>
@@ -62,7 +57,13 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='product_id']" position="attributes">
                 <attribute name="context">{
-                        'categ_id':parent.product_category_id,
+                    'categ_id':parent.product_category_id,
+                    'grade_id':parent.product_grade_level}
+                </attribute>
+            </xpath>
+            <xpath expr="//field[@name='product_tmpl_id']" position="attributes">
+                <attribute name="context">{
+                    'categ_id':parent.product_category_id,
                     'grade_id':parent.product_grade_level}
                 </attribute>
             </xpath>
