@@ -23,23 +23,52 @@ class ProductPricelistItem(models.Model):
     @api.constrains("date_start", "date_end")
     def _constrains_check_start_end(self):
         for line in self:
-            domain = [
-                ("id", "!=", line.id),
-                ("product_id", "=", line.product_id.id),
-                "|",
-                "&",
-                ("date_start", "<=", line.date_start),
-                ("date_end", ">=", line.date_start),
-                "&",
-                ("date_start", "<=", line.date_end),
-                ("date_end", ">=", line.date_end),
-            ]
+            if line.date_start or line.date_start:
+                domain = [
+                    ("id", "!=", line.id),
+                    ("pricelist_id", "=", line.pricelist_id.id),
+                    ("product_id", "=", line.product_id.id),
+                    "|",
+                    "&",
+                    ("date_start", "<=", line.date_start),
+                    ("date_end", ">=", line.date_start),
+                    "&",
+                    ("date_start", "<=", line.date_end),
+                    ("date_end", ">=", line.date_end),
+                ]
+            else:
+                domain = [
+                    ("id", "!=", line.id),
+                    ("pricelist_id", "=", line.pricelist_id.id),
+                    ("product_id", "=", line.product_id.id),
+                    ("date_start", "=", False),
+                    ("date_end", "=", False),
+                ]
             duplicate_lines = self.search(domain)
             if duplicate_lines:
                 raise ValidationError(
                     _(
-                        "The product should have different"
-                        " start and end dates."
+                        "Repeating Products should have different start and "
+                        "end date."
+                    )
+                )
+
+    @api.constrains("min_quantity", "fixed_price")
+    def _constrains_check_min_quantity(self):
+        for line in self:
+            domain = [
+                ("pricelist_id", "=", line.pricelist_id.id),
+                ("product_id", "=", line.product_id.id),
+                ("min_quantity", "<=", 0.0),
+                ("fixed_price", "<=", 0.0),
+                ("compute_price", "=", "fixed"),
+            ]
+            lines = self.search(domain)
+            if lines:
+                raise ValidationError(
+                    _(
+                        "The product should have Fixed Price and Min Quantity"
+                        " greater than 0."
                     )
                 )
 

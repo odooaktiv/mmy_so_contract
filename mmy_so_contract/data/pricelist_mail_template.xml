@@ -59,7 +59,7 @@
                                 <span>Product Grade Level</span>
                             </td>
                             <td>
-                                <t t-esc="ctx.get('product_grade_value')"/>
+                                <t t-out="ctx.get('product_grade_value')"/>
                             </td>
                         </tr>
                         <tr>
@@ -162,6 +162,9 @@
                             <t t-foreach="object.item_ids" t-as="item">
                                 <tr style="text-align: center;">
                                     <td>
+	                                    <t t-if="item.product_tmpl_id.default_code">[<span
+                                                t-field="item.product_tmpl_id.default_code"/>]
+                                        </t>
                                         <span t-if="item.product_tmpl_id" t-field="item.product_tmpl_id.name"/>
                                     </td>
                                     <td>
@@ -216,6 +219,9 @@
                             <t t-foreach="object.product_pricing_ids" t-as="item">
                                 <tr style="text-align: center;">
                                     <td>
+	                                     <t t-if="item.product_tmpl_id.default_code">[<span
+                                                t-field="item.product_tmpl_id.default_code"/>]
+                                        </t>
                                         <span t-if="item.product_template_id" t-field="item.product_template_id.name"/>
                                     </td>
                                     <td>
