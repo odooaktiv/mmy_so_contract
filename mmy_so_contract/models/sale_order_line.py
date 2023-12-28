@@ -11,7 +11,11 @@ class SaleOrderLine(models.Model):
     )
 
     @api.depends(
-        "product_id", "product_uom", "product_uom_qty", "pricelist_id"
+        "product_id",
+        "product_uom",
+        "product_uom_qty",
+        "pricelist_id",
+        "order_id.pricelist_id",
     )
     def _compute_pricelist_item_id(self):
         """Overwrite method to get price based on SOl's connected pricelist"""
@@ -32,7 +36,11 @@ class SaleOrderLine(models.Model):
                 )
 
     @api.depends(
-        "product_id", "product_uom", "product_uom_qty", "pricelist_id"
+        "product_id",
+        "product_uom",
+        "product_uom_qty",
+        "pricelist_id",
+        "order_id.pricelist_id",
     )
     def _compute_price_unit(self):
         """Add pricelist id in dependencies"""

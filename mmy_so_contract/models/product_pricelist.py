@@ -23,8 +23,12 @@ class ProductPricelist(models.Model):
         store=True,
         string="Product Grade Level",
     )
-    effective_date = fields.Datetime(string="Effective Date", copy=False)
-    expiration_date = fields.Datetime(string="Expiration Date", copy=False)
+    effective_date = fields.Datetime(
+        string="Effective Date", copy=False, required=True
+    )
+    expiration_date = fields.Datetime(
+        string="Expiration Date", copy=False, required=True
+    )
     exchange_rate = fields.Char(copy=False, string="Exchange Rate")
     warranty_details = fields.Char(string="Warranty Details", copy=False)
     quality_details = fields.Char(string="Quality Details", copy=False)
@@ -134,3 +138,21 @@ class ProductPricelist(models.Model):
                         "sticky": False,
                     },
                 }
+
+    @api.constrains("effective_date", "expiration_date")
+    def _constrains_check_dates_constrains(self):
+        for line in self:
+            domain = [
+                ("id", "!=", line.id),
+                ("effective_date", "=", line.effective_date),
+                ("expiration_date", "=", line.expiration_date),
+                ("partner_id", "=", line.partner_id.id),
+            ]
+            lines = self.search(domain)
+            if lines:
+                raise UserError(
+                    _(
+                        "The Pricelist already exists for the customer with "
+                        "the same effective and expiration dates."
+                    )
+                )

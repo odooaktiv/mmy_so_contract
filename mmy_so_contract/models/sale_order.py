@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from odoo import fields, models, _
+from odoo import fields, models, _, api
 from datetime import datetime
 
 
@@ -135,3 +135,31 @@ class SaleOrder(models.Model):
             }
         )
         return res
+
+    @api.depends("partner_id", "date_order")
+    def _compute_pricelist_id(self):
+        super()._compute_pricelist_id()
+        for order in self:
+            price_list = self.env["product.pricelist"].search(
+                [
+                    ("partner_id", "in", [order.partner_id.id, False]),
+                ],
+            )
+            for line in order.order_line:
+                if line.pricelist_id not in price_list:
+                    line.pricelist_id = False
+            filtered_list = price_list.filtered(
+                lambda rec: rec.partner_id
+                and rec.effective_date
+                and rec.expiration_date
+                and rec.effective_date <= order.date_order
+                and rec.expiration_date >= order.date_order
+            )
+            if (
+                order.partner_id
+                and order.pricelist_id
+                and filtered_list
+                and (order.pricelist_id != filtered_list[0])
+            ):
+                order.pricelist_id = filtered_list[0].id
+            order._recompute_prices()

@@ -58,7 +58,8 @@ class ProductPricelistItem(models.Model):
         for line in self:
             domain = [
                 ("pricelist_id", "=", line.pricelist_id.id),
-                ("product_id", "=", line.product_id.id), "|",
+                ("product_id", "=", line.product_id.id),
+                "|",
                 ("min_quantity", "<=", 0.0),
                 ("fixed_price", "<=", 0.0),
                 ("compute_price", "=", "fixed"),
