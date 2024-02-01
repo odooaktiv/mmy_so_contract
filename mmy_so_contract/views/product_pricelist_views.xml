@@ -9,7 +9,7 @@
             <xpath expr="//sheet" position="before">
                 <header>
                     <button string="Send Mail" type="object" class="btn-primary"
-                            attrs="{'invisible': [('partner_id', '=', False)]}"
+                            invisible="not partner_id"
                             name="send_documents_email"/>
                 </header>
             </xpath>
@@ -38,13 +38,6 @@
                 <attribute name="context">{'categ_id':parent.product_category_id,
                     'grade_id':parent.product_grade_level}
                 </attribute>
-            </xpath>
-            <xpath expr="//form" position="inside">
-                <div class="oe_chatter">
-                    <field name="message_follower_ids" groups="base.group_user"/>
-                    <field name="activity_ids"/>
-                    <field name="message_ids"/>
-                </div>
             </xpath>
         </field>
     </record>

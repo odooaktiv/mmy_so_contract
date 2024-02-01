@@ -11,9 +11,9 @@
     "author": "MMY Auto",
     "website": "http://www.mmyauto.com",
     "category": "Hidden",
-    "version": "16.0.0.1.0",
+    "version": "17.0.1.1.0",
     "license": "LGPL-3",
-    "depends": ["sale_management", "sale_temporal", "quality_control"],
+    "depends": ["sale_management", "sale_renting", "quality"],
     "data": [
         "data/pricelist_mail_template.xml",
         "security/ir.model.access.csv",

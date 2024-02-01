@@ -7,7 +7,7 @@ class ProductTemplate(models.Model):
     _inherit = "product.template"
 
     document_ids = fields.One2many(
-        "product.document", "product_id", string="Documents"
+        "mmy.product.document", "product_id", string="Documents"
     )
 
     @api.model
@@ -17,7 +17,6 @@ class ProductTemplate(models.Model):
         offset=0,
         limit=None,
         order=None,
-        count=False,
         access_rights_uid=None,
     ):
         if self._context.get("categ_id") and self._context.get("grade_id"):
@@ -37,5 +36,5 @@ class ProductTemplate(models.Model):
                 )
             ]
         return super(ProductTemplate, self)._search(
-            args, offset, limit, order, count, access_rights_uid
+            args, offset, limit, order, access_rights_uid
         )

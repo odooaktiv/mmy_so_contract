@@ -4,8 +4,8 @@ from odoo import models, fields
 
 
 class ProductDocument(models.Model):
-    _name = "product.document"
-    _description = "Product Documents"
+    _name = "mmy.product.document"
+    _description = "MMY Product Documents"
 
     name = fields.Char(string="Document Name", required=True, copy=False)
     file = fields.Binary(

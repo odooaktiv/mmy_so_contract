@@ -21,18 +21,18 @@
         <field name="arch" type="xml">
             <!--Hide 1 out of 2 action_confirm buttons as we do not need both and add approval buttons-->
             <xpath expr="//button[@name='action_confirm']" position="replace">
-                <button name="action_request_approval" string="Request Approval" class="btn-primary" type="object" attrs="{'invisible': [('state', 'not in', ['draft', 'sent'])]}" groups="!mmy_so_contract.group_so_approver"/>
-                <button name="action_approve" string="Approve" class="btn-primary" type="object" attrs="{'invisible': [('state', 'not in', ['draft', 'sent', 'waiting_approval'])]}" groups="mmy_so_contract.group_so_approver"/>
-                <button name="action_reject" string="Reject" class="btn-danger" type="object" attrs="{'invisible': [('state', 'not in', ['draft', 'sent', 'waiting_approval'])]}" groups="mmy_so_contract.group_so_approver"/>
+                <button name="action_request_approval" string="Request Approval" class="btn-primary" type="object" invisible="state not in ['draft', 'sent']" groups="!mmy_so_contract.group_so_approver"/>
+                <button name="action_approve" string="Approve" class="btn-primary" type="object" invisible="state not in ['draft', 'sent', 'waiting_approval']" groups="mmy_so_contract.group_so_approver"/>
+                <button name="action_reject" string="Reject" class="btn-danger" type="object" invisible="state not in ['draft', 'sent', 'waiting_approval']" groups="mmy_so_contract.group_so_approver"/>
             </xpath>
             <!--update remaining action_confirm button's visibility-->
             <xpath expr="//button[@name='action_confirm']" position="attributes">
-                <attribute name="attrs">{'invisible': [('state', 'not in', ['approved'])]}</attribute>
+                <attribute name="invisible">state not in ['approved']</attribute>
                 <attribute name="class">btn-primary</attribute>
             </xpath>
             <!--update action_cancel button's visibility-->
             <xpath expr="//button[@name='action_cancel']" position="attributes">
-                <attribute name="attrs">{'invisible': ['|', ('state', 'not in', ['draft', 'sent', 'waiting_approval', 'approved','sale', 'rejected']), ('id', '=', False)]}</attribute>
+                <attribute name="invisible">state not in ['draft', 'sent', 'waiting_approval', 'approved','sale', 'rejected'] and not id </attribute>
             </xpath>
             <!--update state's visibility: approved is always visible-->
             <xpath expr="//field[@name='state']" position="attributes">

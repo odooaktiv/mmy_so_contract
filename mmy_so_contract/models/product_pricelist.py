@@ -5,8 +5,7 @@ from odoo.exceptions import UserError
 
 
 class ProductPricelist(models.Model):
-    _name = "product.pricelist"
-    _inherit = ["product.pricelist", "mail.thread", "mail.activity.mixin"]
+    _inherit = "product.pricelist"
 
     partner_id = fields.Many2one("res.partner", string="Customer", copy=False)
     incoterms = fields.Char(string="Incoterms", copy=False)

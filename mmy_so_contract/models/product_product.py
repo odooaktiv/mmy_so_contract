@@ -7,7 +7,7 @@ class ProductProduct(models.Model):
     _inherit = "product.product"
 
     variant_document_ids = fields.One2many(
-        "product.document", "product_variant_id", string="Documents"
+        "mmy.product.document", "product_variant_id", string="Documents"
     )
 
     @api.model
@@ -17,7 +17,6 @@ class ProductProduct(models.Model):
         offset=0,
         limit=None,
         order=None,
-        count=False,
         access_rights_uid=None,
     ):
         if self._context.get("categ_id") and self._context.get("grade_id"):
@@ -38,5 +37,5 @@ class ProductProduct(models.Model):
                 )
             ]
         return super(ProductProduct, self)._search(
-            args, offset, limit, order, count, access_rights_uid
+            args, offset, limit, order, access_rights_uid
         )
