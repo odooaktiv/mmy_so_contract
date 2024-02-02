@@ -13,21 +13,15 @@ class ProductPricelist(models.Model):
         "product.category",
         string="Product Category",
         copy=False,
-        required=True,
     )
     product_grade_level = fields.Selection(
         selection="_get_custom_selection",
         copy=False,
-        required=True,
         store=True,
         string="Product Grade Level",
     )
-    effective_date = fields.Datetime(
-        string="Effective Date", copy=False, required=True
-    )
-    expiration_date = fields.Datetime(
-        string="Expiration Date", copy=False, required=True
-    )
+    effective_date = fields.Datetime(string="Effective Date", copy=False)
+    expiration_date = fields.Datetime(string="Expiration Date", copy=False)
     exchange_rate = fields.Char(copy=False, string="Exchange Rate")
     warranty_details = fields.Char(string="Warranty Details", copy=False)
     quality_details = fields.Char(string="Quality Details", copy=False)
