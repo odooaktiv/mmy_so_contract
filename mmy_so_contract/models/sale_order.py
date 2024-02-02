@@ -163,3 +163,7 @@ class SaleOrder(models.Model):
             ):
                 order.pricelist_id = filtered_list[0].id
             order._recompute_prices()
+
+    def _can_be_confirmed(self):
+        self.ensure_one()
+        return self.state in {"draft", "sent", "approved"}
