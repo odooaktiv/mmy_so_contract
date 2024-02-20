@@ -28,6 +28,7 @@
                 <field name="quality_details"/>
                 <field name="quality_check"/>
                 <field name="rebates"/>
+                <field name="product_ids" invisible="1"/>
             </xpath>
             <xpath expr="//tree[1]/field[@name='product_tmpl_id']" position="attributes">
                 <attribute name="context">{'categ_id':parent.product_category_id,

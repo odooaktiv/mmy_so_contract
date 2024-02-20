@@ -19,6 +19,21 @@ class ProductPricelistItem(models.Model):
         required=True,
         help="Pricelist Item applicable on selected option",
     )
+    date_end = fields.Datetime(
+        string="End Date",
+        help="Ending datetime for the pricelist item validation\n"
+        "The displayed value depends on the timezone set in your preferences.",
+    )
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        records = super(ProductPricelistItem, self).create(vals_list)
+        [
+            record.write({"date_end": record.pricelist_id.expiration_date})
+            for record in records
+            if not record.date_end
+        ]
+        return records
 
     @api.constrains("date_start", "date_end")
     def _constrains_check_start_end(self):

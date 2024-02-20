@@ -37,6 +37,21 @@ class ProductPricelist(models.Model):
         copy=False,
         string="Rebates",
     )
+    product_ids = fields.Many2many(
+        "product.product",
+        "product_pricelist_rel",
+        "product_pricelist_id",
+        "product_id",
+        string="Products",
+        compute="_compute_product_pricelist_products",
+        store=True,
+    )
+
+    @api.depends("item_ids")
+    def _compute_product_pricelist_products(self):
+        if self.item_ids.exists():
+            products = self.item_ids.mapped("product_id.id")
+            self.product_ids = [(6, 0, products)]
 
     @api.onchange("product_category_id", "product_grade_level")
     def _onchange_category_grade(self):

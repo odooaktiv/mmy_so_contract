@@ -10,6 +10,49 @@ class SaleOrderLine(models.Model):
         string="Contract", comodel_name="product.pricelist"
     )
 
+    pricelist_ids = fields.Many2many(
+        "product.pricelist",
+        "pricelist_product_rel",
+        "pricelist_product_id",
+        "pricelist_id",
+        string="Pricelist",
+        compute="_compute_product_pricelists",
+        store=True,
+    )
+
+    @api.depends(
+        "product_id",
+        "product_uom",
+        "product_uom_qty",
+        "pricelist_id",
+        "order_id.pricelist_id",
+    )
+    def _compute_product_pricelists(self):
+        for order_line in self:
+            if order_line.product_id:
+                pricelist_item_id = (
+                    self.env["product.pricelist.item"]
+                    .sudo()
+                    .search(
+                        [
+                            ("product_id", "=", order_line.product_id.id),
+                            (
+                                "pricelist_id.effective_date",
+                                "<=",
+                                order_line.order_id.date_order,
+                            ),
+                            (
+                                "pricelist_id.expiration_date",
+                                ">=",
+                                order_line.order_id.date_order,
+                            ),
+                            ("date_end", ">=", order_line.order_id.date_order),
+                        ]
+                    )
+                )
+                pricelist_id = pricelist_item_id.pricelist_id.ids
+                order_line.pricelist_ids = [(6, 0, pricelist_id)]
+
     @api.depends(
         "product_id",
         "product_uom",
@@ -49,39 +92,30 @@ class SaleOrderLine(models.Model):
     @api.onchange("product_template_id", "product_id")
     def _onchange_pricelist_id(self):
         for order_line in self:
-            price_list = self.env["product.pricelist"].search(
-                [
-                    (
-                        "partner_id",
-                        "in",
-                        [order_line.order_id.partner_id.id, False],
-                    ),
-                ],
-            )
-            if order_line.pricelist_id not in price_list:
-                order_line.pricelist_id = False
-            filtered_list = price_list.filtered(
-                lambda rec: rec.partner_id
-                and rec.effective_date
-                and rec.expiration_date
-                and rec.effective_date <= order_line.order_id.date_order
-                and rec.expiration_date >= order_line.order_id.date_order
-                and rec.item_ids.filtered(
-                    lambda item: (
-                        item.product_id
-                        and item.product_id.id == order_line.product_id.id
-                    )
-                    or (
-                        item.product_tmpl_id
-                        and item.product_tmpl_id.id
-                        == order_line.product_template_id.id
-                    )
-                    and item.date_start
-                    and item.date_end
-                    and item.date_start <= order_line.order_id.date_order
-                    and item.date_end >= order_line.order_id.date_order
+            pricelist_item_id = (
+                self.env["product.pricelist.item"]
+                .sudo()
+                .search(
+                    [
+                        ("product_id", "=", order_line.product_id.id),
+                        (
+                            "pricelist_id.effective_date",
+                            "<=",
+                            order_line.order_id.date_order,
+                        ),
+                        (
+                            "pricelist_id.expiration_date",
+                            ">=",
+                            order_line.order_id.date_order,
+                        ),
+                        ("date_end", ">=", order_line.order_id.date_order),
+                    ],
+                    limit=1,
+                    order="min_quantity",
                 )
             )
-            if order_line.order_id.partner_id and filtered_list:
-                order_line.pricelist_id = filtered_list[0].id
+            pricelist_id = pricelist_item_id.pricelist_id or ""
+            if order_line.order_id.partner_id and pricelist_id:
+                order_line.pricelist_id = pricelist_id.id
+                order_line.product_uom_qty = pricelist_item_id.min_quantity
             order_line.order_id._recompute_prices()

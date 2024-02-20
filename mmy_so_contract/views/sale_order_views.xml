@@ -43,7 +43,9 @@
                 <attribute name="domain">['|', ('partner_id','=',partner_id), ('partner_id','=', False)]</attribute>
             </xpath>
             <xpath expr="//field[@name='order_line']//tree//field[@name='name']" position="after">
-                <field name="pricelist_id" domain="['|', ('partner_id', '=', parent.partner_id), ('partner_id', '=', False)]"/>
+                <field name="order_id" invisible="1"/>
+                <field name="pricelist_ids" widget="many2many_tags" column_invisible="True"/>
+                <field name="pricelist_id" domain="['|', ('partner_id', '=', parent.partner_id), ('partner_id', '=', False), ('id', 'in', pricelist_ids)]"/>
             </xpath>
             <xpath expr="//field[@name='date_order']" position="after">
                 <field name="requested_approval_by"/>
